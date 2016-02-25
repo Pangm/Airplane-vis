@@ -1,0 +1,129 @@
+name,iata,icao,lat,lon,country,alt
+Aksu Airport,AKU,ZWAK,41.262501,80.291664,China,3816
+Anshan Teng'ao Airport,AOG,ZYAS,41.103523,123.857834,China,53
+Anqing Tianzhushan Airport,AQG,ZSAQ,30.582222,117.050278,China,-1
+Anshun Huangguoshu Airport,AVA,ZUAS,26.260555,105.873337,China,4812
+Baotou Erliban Airport,BAV,ZBOW,40.559990,109.996902,China,123
+Bijie Feixiong Airport,BFJ,ZUBJ,27.300278,105.301392,China,20
+Beihai Fucheng Airport,BHY,ZGBH,21.539440,109.293800,China,10499
+Guangzhou Baiyun International Airport,CAN,ZGGG,23.392429,113.298698,China,50
+Changde Taohuayuan Airport,CGD,ZGCD,28.918880,111.640198,China,8366
+Zhengzhou Xinzheng International Airport,CGO,ZHCC,34.519669,113.840797,China,495
+Changchun Longjia International Airport,CGQ,ZYCC,43.996208,125.685303,China,706
+Chifeng Yulong Airport,CIF,ZBCF,42.235001,118.908302,China,180
+Changzhi Wangcun Airport,CIH,ZBCZ,36.247501,113.125801,China,164
+Chongqing Jiangbei International Airport,CKG,ZUCK,29.719210,106.641602,China,1365
+Changsha Huanghua International Airport,CSX,ZGHA,28.196667,113.220833,China,217
+Chengdu Shuangliu International Airport,CTU,ZUUU,30.578520,103.946999,China,1625
+Changzhou Benniu Airport,CZX,ZSCG,31.919720,119.778603,China,197
+Datong Yungang Airport,DAT,ZBDT,40.055538,113.481361,China,3442
+Dazhou Heshi Airport,DAX,ZUDX,31.135012,107.426888,China,-1
+Dandong Langtou Airport,DDG,ZYDD,40.025551,124.286598,China,154
+Shangri-La Diqing Airport,DIG,ZPDQ,27.793333,99.677330,China,10761
+Dalian Zhoushuizi International Airport,DLC,ZYTL,38.965660,121.538597,China,107
+Dali Airport,DLU,ZPDL,25.649401,100.319000,China,-1
+Dunhuang Airport,DNH,ZLDH,40.161110,94.809158,China,9186
+Dongsheng Ordos Ejin Horo Airport,DSN,ZBDS,39.849998,110.033333,China,213
+Dayong Zhangjiajie Hehua Airport,DYG,ZGDY,29.107121,110.445686,China,692
+Fuzhou Changle International Airport,FOC,ZSFZ,25.935061,119.663200,China,46
+Haikou Meilan International Airport,HAK,ZJHK,19.934851,110.458900,China,75
+Handan Airport,HDG,ZBHD,36.523888,114.430000,China,-1
+Heihe Airport,HEK,ZYHE,50.171619,127.308884,China,8530
+Hohhot Baita International Airport,HET,ZBHH,40.851421,111.824097,China,3556
+Hefei Xinqiao International Airport,HFE,ZSOF,31.986345,116.970474,China,108
+Hangzhou Xiaoshan International Airport,HGH,ZSHC,30.229500,120.434402,China,23
+Huai'an Lianshui Airport,HIA,ZSSH,33.777222,119.147781,China,-1
+Hailar Hulunbuir Airport,HLD,ZBLA,49.204990,119.824997,China,2169
+Ulanhot Airport,HLH,ZBUL,46.194439,122.008598,China,125
+Harbin Taiping International Airport,HRB,ZYHB,45.623402,126.250298,China,457
+Zhoushan Putuoshan Airport,HSN,ZSZS,29.934200,122.362000,China,3
+Hotan Airport,HTN,ZWTN,37.038521,79.864929,China,4672
+Huizhou Pingtan Airport,HUZ,ZGHZ,23.050419,114.596863,China,55
+Huangyan Luqiao Airport,HYN,ZSLQ,28.562220,121.428596,China,197
+Yinchuan Hedong International Airport,INC,ZLIC,38.322769,106.393303,China,131
+Jiayuguan Airport,JGN,ZLJQ,39.830002,98.410004,China,-1
+Ji'an Airport,JGS,ZSJA,26.899721,114.737503,China,98
+Jinghong Xishuangbanna Gasa Airport,JHG,ZPJH,21.973421,100.766457,China,1815
+Jinchang Jinchuan Airport,JIC,ZLJC,38.541943,102.347778,China,-1
+Quanzhou Jinjiang Airport,JJN,ZSQZ,24.802809,118.587296,China,8465
+Jiamusi Dongjiao Airport,JMU,ZYJM,46.845394,130.455414,China,262
+Jining Qufu Airport,JNG,ZLJN,35.290001,116.339996,China,-1
+Jixi Airport,JXA,ZYJX,45.306084,130.996750,China,650
+Songpan Jiuzhai Huanglong Airport,JZH,ZUJZ,32.856667,103.683060,China,11311
+Kangding Airport,KGT,ZUKD,30.131760,101.747536,China,13916
+Kashgar Airport,KHG,ZWSH,39.542919,76.019951,China,4529
+Nanchang Changbei International Airport,KHN,ZSCN,28.865000,115.900002,China,143
+Kunming Changshui International Airport,KMG,ZPPP,25.101944,102.929169,China,6900
+Ganzhou Huangjin Airport,KOW,ZSGZ,25.851667,114.776665,China,148
+Korla Airport,KRL,ZWKL,41.689999,86.120003,China,148
+Karamay Airport,KRY,ZWKM,45.466389,84.952499,China,1096
+Guiyang Longdongbao International Airport,KWE,ZUGY,26.538521,106.800697,China,3736
+Guilin Liangjiang International Airport,KWL,ZGKL,25.218100,110.039101,China,570
+Lanzhou Zhongchuan International Airport,LHW,ZLLL,36.515240,103.620697,China,6388
+Lijiang Sanyi Airport,LJG,ZPLJ,26.683332,100.250000,China,9843
+Mangshi Airport,LUM,ZPLX,24.405279,98.531898,China,2869
+Lhasa Gonggar Airport,LXA,ZULS,29.297770,90.911942,China,13136
+Luoyang Beijiao Airport,LYA,ZHLY,34.741112,112.388298,China,8202
+Lianyungang Baitabu Airport,LYG,ZSLG,34.571659,118.873596,China,8202
+Linyi Shubuling Airport,LYI,ZSLY,35.046112,118.411667,China,164
+Liuzhou Bailian Airport,LZH,ZGZH,24.207500,109.391098,China,295
+Luzhou Lantian Airport,LZO,ZULZ,28.844757,105.379021,China,-1
+Mudanjiang Hailang Airport,MDG,ZYMD,44.520000,129.559998,China,-1
+Macau International Airport,MFM,VMMC,22.149549,113.591499,China,20
+Mianyang Nanjiao Airport,MIG,ZUMY,31.431110,104.738052,China,4593
+Meixian Airport,MXZ,ZGMX,24.268999,116.103996,China,-1
+Nanchong Gaoping Airport,NAO,ZUNC,30.754000,106.061996,China,5906
+Beijing Nanyuan Airport,NAY,ZBNY,39.782501,116.387779,China,-1
+Baishan Changbaishan Airport,NBS,ZYBS,42.088055,127.548889,China,-1
+Qiqihar Sanjiazi Airport,NDG,ZYQQ,47.316666,123.916664,China,477
+Ningbo Lishe International Airport,NGB,ZSNB,29.826679,121.461899,China,13
+Nanjing Lukou International Airport,NKG,ZSNJ,31.742041,118.862000,China,49
+Nanning Wuxu International Airport,NNG,ZGNN,22.608259,108.172401,China,421
+Nanyang Jiangying Airport,NNY,ZHNY,32.980000,112.610001,China,131
+Nantong Xingdong Airport,NTG,ZSNT,32.072922,120.975601,China,7546
+Beijing Capital International Airport,PEK,ZBAA,40.080109,116.584503,China,116
+Shanghai Pudong International Airport,PVG,ZSPD,31.143370,121.805199,China,13
+Shanghai Hongqiao International Airport,SHA,ZSSS,31.197870,121.336304,China,10
+Shenyang Taoxian International Airport,SHE,ZYTX,41.639839,123.483398,China,198
+Shijiazhuang Zhengding International Airport,SJW,ZBSJ,38.274376,114.694427,China,233
+Jieyang Chaoshan International Airport,SWA,ZGOW,23.552500,116.505836,China,180
+Sanya Phoenix International Airport,SYX,ZJSY,18.302891,109.412201,China,92
+Shenzhen Bao'an International Airport,SZX,ZGSZ,22.639250,113.810600,China,13
+Qingdao Liuting International Airport,TAO,ZSQD,36.266102,120.374397,China,33
+Tengchong Tuofeng Airport,TCZ,ZUTC,24.939379,98.482025,China,6247
+Tongren Fenghuang Airport,TEN,ZUTR,27.883333,109.308891,China,-1
+Tongliao Airport,TGO,ZBTL,43.556660,122.199699,China,144
+Jinan Yaoqiang International Airport,TNA,ZSJN,36.857208,117.215897,China,76
+Tianjin Binhai International Airport,TSN,ZBTJ,39.124352,117.346100,China,33
+Tangshan Sannuhe Airport,TVS,ZBTS,39.718784,117.997910,China,34
+Huangshan Tunxi International Airport,TXN,ZSTX,29.733330,118.255798,China,131
+Taiyuan Wusu International Airport,TYN,ZBYN,37.746891,112.628403,China,2575
+Urumqi Diwopu International Airport,URC,ZWWW,43.907101,87.474243,China,2125
+Yulin Yuyang Airport,UYN,ZLYL,38.274166,109.730278,China,-1
+Weifang Airport,WEF,ZSWF,36.646702,119.119003,China,-1
+Weihai Dashuibo Airport,WEH,ZSWH,37.188141,122.236069,China,145
+Wenzhou Longwan International Airport,WNZ,ZSWZ,27.912220,120.851898,China,7874
+Wuhan Tianhe International Airport,WUH,ZHHH,30.783751,114.208099,China,113
+Wuyishan Airport,WUS,ZSWY,27.716667,117.966667,China,614
+Wuzi Sunan Shuofang International Airport,WUX,ZSWX,31.492889,120.424377,China,16
+Wanzhou Wuqiao Airport,WXN,ZULP,30.799679,108.426949,China,-1
+Xiangyang Liuji Airport,XFN,ZHXF,32.150551,112.290802,China,164
+Xilinhot Airport,XIL,ZBXH,43.915550,115.963799,China,5906
+Xi'an Xianyang International Airport,XIY,ZLXY,34.447109,108.751503,China,1572
+Xiamen Gaoqi International Airport,XMN,ZSAM,24.544029,118.127701,China,59
+Xining Caojiabao Airport,XNN,ZLXN,36.525322,102.037537,China,98
+Xuzhou Guanyin Airport,XUZ,ZSXZ,34.052925,117.554077,China,66
+Yibin Caiba Airport,YBP,ZUYB,28.797659,104.543953,China,7054
+Yuncheng Guangong Airport,YCU,ZBYC,35.018002,110.992996,China,-1
+Yichang Sanxia Airport,YIH,ZHYC,30.671000,111.441002,China,-1
+Yining Airport,YIN,ZWYN,43.955833,81.330276,China,2185
+Yiwu Airport,YIW,ZSYW,29.344563,120.028809,China,197
+Yanji Chaoyangchuan Airport,YNJ,ZYYJ,42.885662,129.439362,China,624
+Yantai Penglai International Airport,YNT,ZSYT,37.657223,120.987221,China,59
+Yancheng Nanyang Airport,YNZ,ZSYN,33.385555,120.125275,China,197
+Yangzhou Taizhou Airport,YTY,ZSYA,32.563057,119.718887,China,7
+Zhaotong Airport,ZAT,ZPZT,27.316668,103.800003,China,6824
+Zhanjiang Airport,ZHA,ZGZJ,21.214439,110.358299,China,213
+Zhongwei Airport,ZHY,ZLZW,37.568935,105.152527,China,4050
+Zhuhai Jinwan Airport,ZUH,ZGSD,22.006660,113.376297,China,138
+Zunyi Xinzhou Airport,ZYI,ZUZY,27.590000,106.999725,China,-1

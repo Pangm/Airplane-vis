@@ -2,13 +2,27 @@ package com.airplane.vis;
 
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
 import processing.core.PApplet;
+import processing.core.PFont;
+import processing.core.PImage;
 import processing.core.PShape;
+import processing.core.PVector;
 
 import com.airplane.entity.Bus;
+import com.airplane.entity.Record;
+import com.airplane.util.LocReformer;
+import com.airplane.util.RecordArrayFileReader;
+import com.csvreader.CsvReader;
+import com.widgets.AirplaneMarker;
 import com.widgets.Button;
 import com.widgets.Circle;
 import com.widgets.CircleButton;
@@ -18,12 +32,18 @@ import com.widgets.Scrollbar;
 
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.geo.Location;
+import de.fhpotsdam.unfolding.marker.Marker;
+import de.fhpotsdam.unfolding.marker.MarkerManager;
+import de.fhpotsdam.unfolding.marker.SimplePointMarker;
 import de.fhpotsdam.unfolding.providers.MBTilesMapProvider;
 import de.fhpotsdam.unfolding.utils.MapUtils;
+import de.fhpotsdam.unfolding.utils.ScreenPosition;
 
 public class AirplaneApp extends PApplet {
 	UnfoldingMap map;
 	final String DATA_DIRECTORY = "./data/";
+	final String IMAGE_DIRECTORY = DATA_DIRECTORY + "ui/";
+	final String MAP_DIRECTORY = DATA_DIRECTORY + "tiles/";
 	Location beijingLocation = new Location(39.9f, 116.3f);
 	List<Bus> buses = new ArrayList<Bus>();
 	List<String> lineNums = new ArrayList<String>();
@@ -31,22 +51,50 @@ public class AirplaneApp extends PApplet {
 	Scrollbar s = null; // the scrollbar
 	Button button = null;
 	Panel panel = null;
-	int initZoomLevel = 6;
+	int initZoomLevel = 5;
+	int oldZoomLevel = 5;
 	float progress = 0;
 	int loadCnt = 0;
 	PShape busLogo;
+	PShape airplaneIcon;
 	Image icon;
+	
+	MarkerManager<Marker> markerManager;
 
 	int displayFrameCnt = 80;
+	
+	PImage airplane;
+	PImage locationIcon;
+	
+	List<Record> records;
+	int counter = 0;
 
 	public static void main(String[] agrs) {
-		PApplet.main(new String[] { "com.airplane.vis.AirpalneApp" });
+		PApplet.main(new String[] { "com.airplane.vis.AirplaneApp" });
+	}
+	
+	public void loadData() {
+		RecordArrayFileReader fileReader = new RecordArrayFileReader(
+    			"./data/data/8dc2eb6.txt",
+    			",",
+    			19);
+    	
+    	try {
+    		records = fileReader.getRecordList();
+			
+			for (Record r : records) {
+				System.out.println(r);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void setup() {
 		size(1366, 768);
 
-		String mbTilesString = sketchPath(DATA_DIRECTORY + "tiles/China-City-6-16.mbtiles");
+		String mbTilesString = sketchPath(MAP_DIRECTORY + "China-City-6-16.mbtiles");
 
 		map = new UnfoldingMap(this, new MBTilesMapProvider(mbTilesString));
 
@@ -55,50 +103,20 @@ public class AirplaneApp extends PApplet {
 //		map.setZoomRange(6, 14); // prevent zooming too far out
 //		map.setPanningRestriction(beijingLocation, 50);
 		MapUtils.createDefaultEventDispatcher(this, map);
+		
+		frameRate(60);
+		loadCnt = (int) (frameRate * 6);
 
-//		initBuses(buses, DATA_DIRECTORY);
-//
-//		s = new Scrollbar(this, width / 2, 7 * height / 8, width / 3, 20, 20,
-//				buses);
-//
-//		button = new Button(this, 6 * width / 7, 7 * height / 8 - 10, 20, 20,
-//				buses);
-//		panel = new Panel(this, 1 * width / 20, 4 * height / 5, 9 * width / 10,
-//				3 * height / 20, buses);
-//
-//		controls.add(panel);
-//		controls.add(s);
-//		controls.add(button);
-//
-//		Circle grayCircle = new Circle(this, 1 * width / 20 + 60,
-//				4 * height / 5 + 40, 30, 30, 1);
-//		Circle yellowCircle = new Circle(this, 1 * width / 20 + 100,
-//				4 * height / 5 + 40, 30, 30, 0);
-//		controls.add(grayCircle);
-//		controls.add(yellowCircle);
-//
-//		int half = (lineNums.size() + 1) / 2;
-//
-//		for (int i = 0; i < half; i++) {
-//			CircleButton cButton = new CircleButton(this, 1 * width / 20 + 150
-//					+ i * 35, 4 * height / 5 + 20, 25, 25, buses,
-//					lineNums.get(i));
-//			controls.add(cButton);
-//		}
-//
-//		for (int i = half; i < lineNums.size(); i++) {
-//			CircleButton cButton = new CircleButton(this, 1 * width / 20 + 150
-//					+ (i - half) * 35, 19 * height / 20 - 30, 25, 25, buses,
-//					lineNums.get(i));
-//			controls.add(cButton);
-//		}
-//		this.registerMethod("mouseEvent", this);
-//		frameRate(60);
-//		loadCnt = (int) (frameRate * 6);
-//
-//		busLogo = loadShape("./data/bus_logo.svg");
-//		Toolkit tk = Toolkit.getDefaultToolkit();
-//		icon = tk.createImage("./data/bus-red-icon.png");
+		busLogo = loadShape(IMAGE_DIRECTORY + "bus_logo.svg");
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		icon = tk.createImage(IMAGE_DIRECTORY + "bus-red-icon.png");
+		
+		airplaneIcon = loadShape(IMAGE_DIRECTORY + "white_Airplane_ok.svg");
+		locationIcon = loadImage(IMAGE_DIRECTORY + "location_blue_10x14.png");
+		counter = 0;
+		
+		markerManager = AirportsMarkerManager();
+		map.addMarkerManager(markerManager);
 	}
 
 	public void draw() {
@@ -107,14 +125,58 @@ public class AirplaneApp extends PApplet {
 		this.frame.setTitle("Beijing Bus");
 		this.frame.setIconImage(icon);
 		map.draw();
+		ScreenPosition bjScreenPos = map.getScreenPosition(beijingLocation);
+		
+		image(locationIcon, bjScreenPos.x, bjScreenPos.y); 
+		
+		
 
 		if (loadCnt > 0) {
 			fill(255);
 			rect(0, 0, width, height);
 			shape(busLogo, width / 2 - width / 16f, height / 2 - 1.225f * width
 					/ 16, width / 8f, 1.225f * width / 8);
+			loadData();
 			loadCnt--;
 		} else {
+			
+			int zoomLevel = map.getZoomLevel();
+			if (oldZoomLevel != zoomLevel) {
+				if (zoomLevel >= 7) {
+					markerManager.disableDrawing();
+				} else {
+					markerManager.enableDrawing();
+				}
+
+				oldZoomLevel = zoomLevel;
+			}
+
+			
+			
+			int index = counter / 20 ;
+			if (index < records.size()) {
+				counter++;
+				
+				ScreenPosition airplaneCurScreenPos = map.getScreenPosition(records.get(index).getLoc());
+				
+				pushMatrix();
+				translate(airplaneCurScreenPos.x, airplaneCurScreenPos.y);
+				
+				if (index + 1 < records.size()) {
+					ScreenPosition headingPos = map.getScreenPosition(records.get(index+1).getLoc());
+					PVector v = new PVector(
+							headingPos.x - airplaneCurScreenPos.x,
+							headingPos.y - airplaneCurScreenPos.y
+					);
+					float theta = PVector.angleBetween(v, new PVector(1, 0));
+					rotate(-theta);
+				}
+				
+				shape(airplaneIcon, 0, 0, 20, 20);
+				popMatrix();
+			}
+			
+			
 //			for (Control control : controls) {
 //				control.display();
 //			}
@@ -144,4 +206,97 @@ public class AirplaneApp extends PApplet {
 //			}
 		}
 	}
+	
+	public void mouseMoved() {
+		for (Marker marker : map.getMarkers()) {
+			marker.setSelected(false);
+		}
+		Marker marker = map.getFirstHitMarker(mouseX, mouseY);
+		if (marker != null)
+			marker.setSelected(true);
+	}
+	
+	private MarkerManager<Marker> AirportsMarkerManager() {
+		MarkerManager<Marker> markerManager = new MarkerManager<Marker>();
+		
+		markerManager.addMarkers(getAirportsMarkers(false));
+//		SimplePointMarker nycMarker = new SimplePointMarker(new Location(40.71, -73.99));
+//		nycMarker.setRadius(20);
+//		markerManager.addMarker(nycMarker);
+//
+//		SimplePointMarker bostonMarker = new SimplePointMarker(new Location(42.35, -71.04));
+//		bostonMarker.setRadius(20);
+//		markerManager.addMarker(bostonMarker);
+
+		return markerManager;
+	}
+	
+	
+	private List<Marker> getAirportsMarkers(boolean isReformed) {
+		ArrayList<Marker> markers = new ArrayList<Marker>();
+		
+		
+		File stationFile = new File(DATA_DIRECTORY + "data/domestic-airports.txt");
+        InputStream airportsInputStream = null;
+		try {
+			airportsInputStream = new FileInputStream(stationFile);
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        
+        PFont font = loadFont(DATA_DIRECTORY + "ui/OpenSans-12.vlw");
+//		berlinMarker = new LabeledMarker(berlinLocation, "Berlin", font, 15);
+
+        CsvReader airportsReader = new CsvReader(
+                airportsInputStream,
+                ',',
+                Charset.forName("utf-8"));
+
+        try {
+            airportsReader.readHeaders();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+		
+        try {
+            while (airportsReader.readRecord()) {
+                String name = airportsReader.get("name");
+                String iata = airportsReader.get("iata");
+                String icao = airportsReader.get("icao");
+                String country = airportsReader.get("country");
+                
+                float longitude = Float.parseFloat(airportsReader.get("lon"));
+                float latitude = Float.parseFloat(airportsReader.get("lat"));
+                Location loc;
+
+                if (!isReformed) {
+                    loc = LocReformer.reform(new Location(latitude, longitude));
+                    System.out.print("Before: "
+                                    + longitude
+                                    + "---"
+                                    + latitude
+                    );
+
+                    System.out.println("---After: "
+                                    + loc.getLon()
+                                    + "---"
+                                    + loc.getLat()
+                    );
+                } else {
+                    loc = new Location(latitude, longitude);
+                }
+                
+                
+                AirplaneMarker marker = new AirplaneMarker(loc, name, locationIcon, font, 15);
+
+                markers.add(marker);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+		
+		return markers;
+	}
+	
 }
