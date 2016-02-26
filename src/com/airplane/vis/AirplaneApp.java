@@ -17,40 +17,32 @@ import processing.core.PImage;
 import processing.core.PShape;
 import processing.core.PVector;
 
-import com.airplane.entity.Bus;
 import com.airplane.entity.Record;
 import com.airplane.util.LocReformer;
 import com.airplane.util.RecordArrayFileReader;
 import com.csvreader.CsvReader;
 import com.widgets.AirplaneMarker;
-import com.widgets.Button;
-import com.widgets.Circle;
-import com.widgets.CircleButton;
-import com.widgets.Control;
-import com.widgets.Panel;
-import com.widgets.Scrollbar;
 
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.marker.MarkerManager;
-import de.fhpotsdam.unfolding.marker.SimplePointMarker;
 import de.fhpotsdam.unfolding.providers.MBTilesMapProvider;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import de.fhpotsdam.unfolding.utils.ScreenPosition;
 
 public class AirplaneApp extends PApplet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 95402802576670615L;
 	UnfoldingMap map;
 	final String DATA_DIRECTORY = "./data/";
 	final String IMAGE_DIRECTORY = DATA_DIRECTORY + "ui/";
 	final String MAP_DIRECTORY = DATA_DIRECTORY + "tiles/";
 	Location beijingLocation = new Location(39.9f, 116.3f);
-	List<Bus> buses = new ArrayList<Bus>();
 	List<String> lineNums = new ArrayList<String>();
 	List<Location> pathLocs = null;
-	Scrollbar s = null; // the scrollbar
-	Button button = null;
-	Panel panel = null;
 	int initZoomLevel = 5;
 	int oldZoomLevel = 5;
 	float progress = 0;
@@ -70,9 +62,11 @@ public class AirplaneApp extends PApplet {
 	int counter = 0;
 
 	public static void main(String[] agrs) {
-		PApplet.main(new String[] { "com.airplane.vis.AirplaneApp" });
+		PApplet.main(new String[] { "com.airplane.vis.AirplaneApp", "--full-screen" });
 	}
-	
+    public boolean sketchFullScreen() {
+    	return true;
+    }
 	public void loadData() {
 		RecordArrayFileReader fileReader = new RecordArrayFileReader(
     			"./data/data/8dc2eb6.txt",
@@ -92,7 +86,11 @@ public class AirplaneApp extends PApplet {
 	}
 	
 	public void setup() {
-		size(1366, 768);
+//		size(1366, 768);
+		size(displayWidth, displayHeight);
+		if (frame != null) {
+            frame.setResizable(true);
+        }
 
 		String mbTilesString = sketchPath(MAP_DIRECTORY + "China-City-6-16.mbtiles");
 
@@ -125,12 +123,10 @@ public class AirplaneApp extends PApplet {
 		this.frame.setTitle("Beijing Bus");
 		this.frame.setIconImage(icon);
 		map.draw();
-		ScreenPosition bjScreenPos = map.getScreenPosition(beijingLocation);
+//		ScreenPosition bjScreenPos = map.getScreenPosition(beijingLocation);
+//		
+//		image(locationIcon, bjScreenPos.x, bjScreenPos.y); 
 		
-		image(locationIcon, bjScreenPos.x, bjScreenPos.y); 
-		
-		
-
 		if (loadCnt > 0) {
 			fill(255);
 			rect(0, 0, width, height);
@@ -142,7 +138,7 @@ public class AirplaneApp extends PApplet {
 			
 			int zoomLevel = map.getZoomLevel();
 			if (oldZoomLevel != zoomLevel) {
-				if (zoomLevel >= 7) {
+				if (zoomLevel < 5) {
 					markerManager.disableDrawing();
 				} else {
 					markerManager.enableDrawing();
@@ -150,8 +146,6 @@ public class AirplaneApp extends PApplet {
 
 				oldZoomLevel = zoomLevel;
 			}
-
-			
 			
 			int index = counter / 20 ;
 			if (index < records.size()) {
@@ -220,13 +214,6 @@ public class AirplaneApp extends PApplet {
 		MarkerManager<Marker> markerManager = new MarkerManager<Marker>();
 		
 		markerManager.addMarkers(getAirportsMarkers(false));
-//		SimplePointMarker nycMarker = new SimplePointMarker(new Location(40.71, -73.99));
-//		nycMarker.setRadius(20);
-//		markerManager.addMarker(nycMarker);
-//
-//		SimplePointMarker bostonMarker = new SimplePointMarker(new Location(42.35, -71.04));
-//		bostonMarker.setRadius(20);
-//		markerManager.addMarker(bostonMarker);
 
 		return markerManager;
 	}
@@ -246,7 +233,6 @@ public class AirplaneApp extends PApplet {
 		}
         
         PFont font = loadFont(DATA_DIRECTORY + "ui/OpenSans-12.vlw");
-//		berlinMarker = new LabeledMarker(berlinLocation, "Berlin", font, 15);
 
         CsvReader airportsReader = new CsvReader(
                 airportsInputStream,
