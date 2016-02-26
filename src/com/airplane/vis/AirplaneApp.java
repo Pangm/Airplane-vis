@@ -17,6 +17,7 @@ import processing.core.PImage;
 import processing.core.PShape;
 import processing.core.PVector;
 
+import com.airplane.entity.Flight;
 import com.airplane.entity.Record;
 import com.airplane.util.LocReformer;
 import com.airplane.util.RecordArrayFileReader;
@@ -30,6 +31,7 @@ import de.fhpotsdam.unfolding.marker.MarkerManager;
 import de.fhpotsdam.unfolding.providers.MBTilesMapProvider;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import de.fhpotsdam.unfolding.utils.ScreenPosition;
+import de.fhpotsdam.unfolding.utils.StyleConstants;
 
 public class AirplaneApp extends PApplet {
 	/**
@@ -40,14 +42,13 @@ public class AirplaneApp extends PApplet {
 	final String DATA_DIRECTORY = "./data/";
 	final String IMAGE_DIRECTORY = DATA_DIRECTORY + "ui/";
 	final String MAP_DIRECTORY = DATA_DIRECTORY + "tiles/";
-	Location beijingLocation = new Location(39.9f, 116.3f);
-	List<String> lineNums = new ArrayList<String>();
-	List<Location> pathLocs = null;
+	Location beijingLocation = new Location(37.3505, 106.842);// new Location(39.9f, 116.3f);
+
 	int initZoomLevel = 5;
-	int oldZoomLevel = 5;
+	int oldZoomLevel = 0;
 	float progress = 0;
 	int loadCnt = 0;
-	PShape busLogo;
+	PShape airplaneLogo;
 	PShape airplaneIcon;
 	Image icon;
 	
@@ -58,7 +59,7 @@ public class AirplaneApp extends PApplet {
 	PImage airplane;
 	PImage locationIcon;
 	
-	List<Record> records;
+	List<FlightTrack> tracks = new ArrayList<FlightTrack>();
 	int counter = 0;
 
 	public static void main(String[] agrs) {
@@ -67,9 +68,14 @@ public class AirplaneApp extends PApplet {
     public boolean sketchFullScreen() {
     	return true;
     }
-	public void loadData() {
+    
+    
+	public FlightTrack loadData(String path) {
+		List<Record> records;
+		FlightTrack track = null;
+		
 		RecordArrayFileReader fileReader = new RecordArrayFileReader(
-    			"./data/data/8dc2eb6.txt",
+				path,
     			",",
     			19);
     	
@@ -79,9 +85,42 @@ public class AirplaneApp extends PApplet {
 			for (Record r : records) {
 				System.out.println(r);
 			}
+			track = new FlightTrack(records.get(0).getFlight(), records);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+    	
+    	return track;
+	}
+	
+	private void initFlightTracks(List<FlightTrack> tracks, String filePath) {
+//		tracks = new ArrayList<FlightTrack>();
+		try {
+			File file = new File(filePath);
+			if (file.isDirectory()) {
+				System.out.println(file.getAbsolutePath());
+				String[] filelist = file.list();
+				for (int i = 0; i < filelist.length; i++) {
+					File readfile = new File(filePath + "/" + filelist[i]);
+					if (!readfile.isDirectory()) {
+						String name = readfile.getName();
+						System.out.println("path=" + readfile.getPath());
+						System.out.println("absolutepath="
+								+ readfile.getAbsolutePath());
+						System.out.println("name=" + name);
+
+						FlightTrack track = loadData(readfile.getPath());
+						if (track != null) {
+							tracks.add(track);
+						}
+					} else {
+						// readfile(filePath + "/" + filelist[i]);
+					}
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("readfile()   Exception:" + e.getMessage());
 		}
 	}
 	
@@ -98,16 +137,14 @@ public class AirplaneApp extends PApplet {
 
 		map.zoomToLevel(initZoomLevel);
 		map.panTo(beijingLocation);
-//		map.setZoomRange(6, 14); // prevent zooming too far out
-//		map.setPanningRestriction(beijingLocation, 50);
 		MapUtils.createDefaultEventDispatcher(this, map);
 		
 		frameRate(60);
 		loadCnt = (int) (frameRate * 6);
 
-		busLogo = loadShape(IMAGE_DIRECTORY + "bus_logo.svg");
+		airplaneLogo = loadShape(IMAGE_DIRECTORY + "airplane-logo.svg");
 		Toolkit tk = Toolkit.getDefaultToolkit();
-		icon = tk.createImage(IMAGE_DIRECTORY + "bus-red-icon.png");
+		icon = tk.createImage(IMAGE_DIRECTORY + "airplane-icon.png");
 		
 		airplaneIcon = loadShape(IMAGE_DIRECTORY + "white_Airplane_ok.svg");
 		locationIcon = loadImage(IMAGE_DIRECTORY + "location_blue_10x14.png");
@@ -120,25 +157,30 @@ public class AirplaneApp extends PApplet {
 	public void draw() {
 		background(0);
 		
-		this.frame.setTitle("Beijing Bus");
+		this.frame.setTitle("Airplane Vis");
 		this.frame.setIconImage(icon);
 		map.draw();
-//		ScreenPosition bjScreenPos = map.getScreenPosition(beijingLocation);
-//		
-//		image(locationIcon, bjScreenPos.x, bjScreenPos.y); 
 		
 		if (loadCnt > 0) {
+			
+			
 			fill(255);
 			rect(0, 0, width, height);
-			shape(busLogo, width / 2 - width / 16f, height / 2 - 1.225f * width
-					/ 16, width / 8f, 1.225f * width / 8);
-			loadData();
+			pushStyle();
+			shapeMode(CENTER);
+			
+			shape(airplaneLogo, width / 2, height / 2, 
+					width / 5f, width / 5f);
+
+			popStyle();
+//			loadData();
+			initFlightTracks(tracks, DATA_DIRECTORY + "records");
 			loadCnt--;
 		} else {
 			
 			int zoomLevel = map.getZoomLevel();
 			if (oldZoomLevel != zoomLevel) {
-				if (zoomLevel < 5) {
+				if (zoomLevel < 6) {
 					markerManager.disableDrawing();
 				} else {
 					markerManager.enableDrawing();
@@ -147,56 +189,51 @@ public class AirplaneApp extends PApplet {
 				oldZoomLevel = zoomLevel;
 			}
 			
-			int index = counter / 20 ;
-			if (index < records.size()) {
-				counter++;
-				
-				ScreenPosition airplaneCurScreenPos = map.getScreenPosition(records.get(index).getLoc());
-				
-				pushMatrix();
-				translate(airplaneCurScreenPos.x, airplaneCurScreenPos.y);
-				
-				if (index + 1 < records.size()) {
-					ScreenPosition headingPos = map.getScreenPosition(records.get(index+1).getLoc());
-					PVector v = new PVector(
-							headingPos.x - airplaneCurScreenPos.x,
-							headingPos.y - airplaneCurScreenPos.y
-					);
-					float theta = PVector.angleBetween(v, new PVector(1, 0));
-					rotate(-theta);
+			counter++;
+			
+			if (counter % 10 == 0) {
+				for (FlightTrack track : tracks) {
+					track.update();
 				}
-				
-				shape(airplaneIcon, 0, 0, 20, 20);
-				popMatrix();
 			}
 			
+			for (FlightTrack track : tracks) {
+				track.render();
+			}
 			
-//			for (Control control : controls) {
-//				control.display();
-//			}
-//
-//			for (Bus bus : buses) {
-//				bus.display();
-//			}
-//
-//			if (mousePressed) {
-//				for (Bus bus : buses) {
-//					bus.clearPreviosPos();
+			if (counter > 1000) {
+				counter = 0;
+			}
+//			if (index < records.size()) {
+//				counter++;
+//				
+//				ScreenPosition airplaneCurScreenPos = map.getScreenPosition(records.get(index).getLoc());
+//				
+//				pushMatrix();
+//				translate(airplaneCurScreenPos.x, airplaneCurScreenPos.y);
+//				
+//				if (index + 1 < records.size()) {
+//					ScreenPosition headingPos = map.getScreenPosition(records.get(index+1).getLoc());
+//					PVector v = PVector.sub(
+//							airplaneCurScreenPos,
+//							headingPos
+//					);
+//					
+//					float angle = PVector.angleBetween(v, new PVector(1, 0));
+//					
+//                    if (v.y < 0) {
+//                        rotate(PI -angle);
+//                    } else {
+//                        rotate(PI + angle);
+//                    }
+////                    ctx.shape(busShapeRight, 0, 0, 75, 25);
+//					
+//					
+////					rotate(-angle);
 //				}
-//
-//				for (Control control : controls) {
-//					control.setIsDisplay(true);
-//				}
-//				button.setIsDisplay(true);
-//				displayFrameCnt = 100;
-//			}
-//
-//			if (displayFrameCnt > 0) {
-//				displayFrameCnt--;
-//			} else {
-//				for (Control control : controls) {
-//					control.setIsDisplay(false);
-//				}
+//				
+//				shape(airplaneIcon, 0, 0, 20, 20);
+//				popMatrix();
 //			}
 		}
 	}
@@ -285,4 +322,99 @@ public class AirplaneApp extends PApplet {
 		return markers;
 	}
 	
+	class FlightTrack {
+		Flight flight;
+		List<Record> records;
+		int index = 0;
+		
+		int imgWidth = 20;
+		int imgHeight = 20;
+		ScreenPosition airplaneCurScreenPos;
+		PFont font = loadFont(DATA_DIRECTORY + "ui/OpenSans-12.vlw");
+		int fontSize = 12;
+		int space = 6;
+		protected int strokeWeight = StyleConstants.DEFAULT_STROKE_WEIGHT;
+		protected int highlightColor = StyleConstants.HIGHLIGHTED_FILL_COLOR;
+		protected int highlightStrokeColor = StyleConstants.HIGHLIGHTED_STROKE_COLOR;
+		
+		public FlightTrack() {
+			
+		}
+		
+		public FlightTrack(Flight flight, List<Record> records) {
+			this.flight = flight;
+			this.records = records;
+		}
+		
+		public void render() {
+			airplaneCurScreenPos = map.getScreenPosition(records.get(index).getLoc());
+			
+			pushStyle();
+			pushMatrix();
+			translate(airplaneCurScreenPos.x, airplaneCurScreenPos.y);
+			
+			if (index + 1 < records.size()) {
+				ScreenPosition headingPos = map.getScreenPosition(records.get(index+1).getLoc());
+				PVector v = PVector.sub(
+						airplaneCurScreenPos,
+						headingPos
+				);
+				
+				float angle = PVector.angleBetween(v, new PVector(1, 0));
+				
+                if (v.y < 0) {
+                    rotate(PI -angle);
+                } else {
+                    rotate(PI + angle);
+                }
+//                ctx.shape(busShapeRight, 0, 0, 75, 25);
+				
+				
+//				rotate(-angle);
+			}
+			
+			shapeMode(CENTER);
+			shape(airplaneIcon, 0, 0, imgWidth, imgHeight);
+			popMatrix();
+			popStyle();
+			
+			if (isInside(mouseX, mouseY, airplaneCurScreenPos.x, airplaneCurScreenPos.y)) {
+				// label
+				pushStyle();
+				pushMatrix();
+				Record r = records.get(index);
+				if (flight != null) {
+					String info = "[loc=" + r.getLoc()
+							+ ", height=" + r.getHeight() 
+							+ ", flight=" + r.getFlight();
+					//flight.getID() + flight.getFlightNo() + flight.getLoc();
+					if (font != null) {
+						textFont(font);
+					}
+					fill(highlightColor);
+					stroke(highlightStrokeColor);
+					rect(airplaneCurScreenPos.x + strokeWeight / 2, airplaneCurScreenPos.y - fontSize + strokeWeight / 2 - space, textWidth(info) + space * 1.5f,
+							fontSize + space);
+					fill(255, 255, 255);
+					text(info , Math.round(airplaneCurScreenPos.x + space * 0.75f + strokeWeight / 2),
+							Math.round(airplaneCurScreenPos.y + strokeWeight / 2 - space * 0.75f));
+				}
+				popMatrix();
+				popStyle();
+			}
+		}
+		
+		public void update() {
+			if (index + 1 < records.size()) {
+				index ++;
+			}
+		}
+		
+		public boolean isInside(float checkX, float checkY, float x, float y) {
+			return checkX > x - imgWidth / 2 
+					&& checkX < x + imgWidth / 2 
+					&& checkY > y - imgHeight / 2
+					&& checkY < y + imgHeight / 2;
+		}
+	}
 }

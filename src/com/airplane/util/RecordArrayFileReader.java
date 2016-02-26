@@ -168,22 +168,22 @@ public class RecordArrayFileReader {
     }
     
     
-    public static void main(String[] args) {
-    	RecordArrayFileReader fileReader = new RecordArrayFileReader(
-    			"./data/data/8d9f5a0.txt",
-    			",",
-    			19);
-    	
-    	try {
-			List<Record> recordList = fileReader.getRecordList();
-			
-			for (Record r : recordList) {
-				System.out.println(r);
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	
-    }
+//    public static void main(String[] args) {
+//    	RecordArrayFileReader fileReader = new RecordArrayFileReader(
+//    			"./data/data/8d9f5a0.txt",
+//    			",",
+//    			19);
+//    	
+//    	try {
+//			List<Record> recordList = fileReader.getRecordList();
+//			
+//			for (Record r : recordList) {
+//				System.out.println(r);
+//			}
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//    	
+//    }
 }
